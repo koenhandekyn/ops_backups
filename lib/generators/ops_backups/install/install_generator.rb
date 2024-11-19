@@ -35,7 +35,7 @@ class OpsBackups::InstallGenerator < Rails::Generators::Base
     recurring_file = Rails.root.join("config", "recurring.yml")
 
     if File.exist?(recurring_file)
-      recurring_config = <<~YAML.lines.map { |line| "\t#{line}" }.join
+      recurring_config = <<~YAML.lines.map { |line| "  #{line}" }.join
         backup_db:
           class: OpsBackups::BackupDbJob
           args: [tag: "db_pg_backup", cleanup: "retain_tiered_cleanup_policy"]
@@ -47,5 +47,11 @@ class OpsBackups::InstallGenerator < Rails::Generators::Base
     else
       say "config/recurring.yml not found. Please create it and re-run this generator.", :red
     end
+
+    # # copy the admin/backup.rb file to app/admin/ops_backups/backup.rb
+    # def copy_admin_backup
+    #   copy_file "admin/backup.rb", Rails.root.join("app", "admin", "ops_backups", "backup.rb")
+    #   say "Copied admin/backup.rb to app/admin/ops_backups/backup.rb.", :green
+    # end
   end
 end

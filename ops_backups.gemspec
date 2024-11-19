@@ -1,8 +1,8 @@
-require_relative "lib/ops/backups/version"
+require_relative "lib/ops_backups/version"
 
 Gem::Specification.new do |spec|
   spec.name        = "ops_backups"
-  spec.version     = Ops::Backups::VERSION
+  spec.version     = OpsBackups::VERSION
   spec.authors     = [ "Koen Handekyn" ]
   spec.email       = [ "github.com@handekyn.com" ]
   spec.homepage    = "https://github.com/koenhandekyn/ops-backups"

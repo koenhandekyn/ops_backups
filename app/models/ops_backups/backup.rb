@@ -1,23 +1,36 @@
 module OpsBackups
-  class Backup < ApplicationRecord
+  class Backup < ActiveRecord::Base
     # has_one_attached :backup_file, service: :backup_storage
     has_one_attached :backup_file, service: :backups
     self.table_name = "ops_backups"
 
     default_scope { order(updated_at: :desc) }
 
-    def db_pg_backup(exclude_tables: [], tag: nil)
-      tag ||= exclude_tables.empty? ? "db_pg_full" : "db_pg_partial"
-      Rails.logger.info("Backing up database, skipping tables: \#{exclude_tables.join(", ")}")
-      db_url = ENV["DATABASE_URL"]
-      self.tag = tag
-      self.name = filename = "pg_\#{db_url.split('/').last}_backup_\#{Time.now.to_i}.dump"
-      save!
+    def self.ransackable_attributes(auth_object = nil)
+      ["created_at", "id", "name", "new_id", "tag", "updated_at"]
+    end
 
-      Tempfile.new("pgbackup") do |tempfile|
+    def self.test
+      "self.test"
+    end
+
+    def hoho
+      "hihi"
+    end
+
+    def db_pg_backup(tag: nil, exclude_tables: [])
+      db_url = ENV["DATABASE_URL"]
+      tag ||= exclude_tables.empty? ? "db_pg_full" : "db_pg_partial" # if tag.empty?
+      self.tag = tag
+      self.name = "pg_#{db_url.split('/').last}_backup_#{Time.now.to_i}.dump"
+      save!
+      Rails.logger.info("Backing up database")
+      # exclude_tables = []
+      filename = self.name
+      Tempfile.open("pgbackup") do |tempfile|
         begin
           excluded_tables_param = exclude_tables.map { |table| "--exclude-table-data=\#{table}" }.join(" ")
-          command = ["pg_dump", "--no-owner", excluded_tables_param, "-v", "-Fc", "-f", tempfile.path, db_url]
+          command = ["pg_dump", "--no-owner", excluded_tables_param, "-v", "-Fc", "-f", tempfile.path, db_url].reject(&:empty?)
 
           stdout, stderr, status = Open3.capture3(*command)
 

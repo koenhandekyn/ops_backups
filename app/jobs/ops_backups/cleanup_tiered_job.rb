@@ -9,6 +9,6 @@ class OpsBackups::CleanupTieredJob < ApplicationJob
   #
   # @example Tasks::CleanupTiered.perform_now(tag: "db_pg_full")
   def perform(tag: "db_pg_full")
-    Ops::Backup.retain_tiered_cleanup_policy(tag: tag)
+    OpsBackups::Backup.retain_tiered_cleanup_policy(tag: tag)
   end
 end
