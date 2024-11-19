@@ -7,7 +7,7 @@ module OpsBackups
     default_scope { order(updated_at: :desc) }
 
     def self.ransackable_attributes(auth_object = nil)
-      ["created_at", "id", "name", "new_id", "tag", "updated_at"]
+      [ "created_at", "id", "name", "new_id", "tag", "updated_at" ]
     end
 
     def self.test
@@ -30,7 +30,7 @@ module OpsBackups
       Tempfile.open("pgbackup") do |tempfile|
         begin
           excluded_tables_param = exclude_tables.map { |table| "--exclude-table-data=\#{table}" }.join(" ")
-          command = ["pg_dump", "--no-owner", excluded_tables_param, "-v", "-Fc", "-f", tempfile.path, db_url].reject(&:empty?)
+          command = [ "pg_dump", "--no-owner", excluded_tables_param, "-v", "-Fc", "-f", tempfile.path, db_url ].reject(&:empty?)
 
           stdout, stderr, status = Open3.capture3(*command)
 
