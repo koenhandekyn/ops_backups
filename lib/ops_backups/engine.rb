@@ -7,5 +7,9 @@ module OpsBackups
         app.config.paths["db/migrate"].concat(config.paths["db/migrate"].expanded)
       end
     end
+
+    initializer :i18n do |app|
+      app.config.i18n.load_path += Dir[root.join("config", "locales", "**", "*.{rb,yml}")]
+    end
   end
 end

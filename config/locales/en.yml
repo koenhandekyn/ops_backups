@@ -1,0 +1,7 @@
+---
+en:
+  admin:
+    ops:
+      backup: "Backup"
+      backup_scheduled: "Backup scheduled"
+      backup_db: "Backup database"
