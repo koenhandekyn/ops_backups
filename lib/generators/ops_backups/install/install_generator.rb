@@ -1,12 +1,13 @@
 class OpsBackups::InstallGenerator < Rails::Generators::Base
   source_root File.expand_path("templates", __dir__)
 
-  desc "Copies migrations and adds a storage service configuration to storage.yml"
+  desc "Adds a storage service configuration to storage.yml"
 
-  def copy_migrations
-    rake "railties:install:migrations FROM=ops_backups"
-    say "Migrations copied to your application.", :green
-  end
+  # it seems the migrations already are available in the host app
+  # def copy_migrations
+  #   rake "railties:install:migrations FROM=ops_backups"
+  #   say "Migrations copied to your application.", :green
+  # end
 
   def add_storage_service
     storage_file = Rails.root.join("config", "storage.yml")
