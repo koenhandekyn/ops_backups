@@ -5,7 +5,7 @@ Gem::Specification.new do |spec|
   spec.version     = OpsBackups::VERSION
   spec.authors     = [ "Koen Handekyn" ]
   spec.email       = [ "github.com@handekyn.com" ]
-  spec.homepage    = "https://github.com/koenhandekyn/ops-backups"
+  spec.homepage    = "https://github.com/koenhandekyn/ops_backups"
   spec.summary     = "A Ruby gem for managing PostgreSQL backups."
   spec.description = "This gem provides functionality to backup PostgreSQL databases to ActiveStorage (S3) from within a Rails context."
   spec.license     = "MIT"
@@ -16,8 +16,8 @@ Gem::Specification.new do |spec|
   # spec.metadata["allowed_push_host"] = "TODO"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/koenhandekyn/ops-backups/tree/main"
-  spec.metadata["changelog_uri"] = "https://github.com/koenhandekyn/ops-backups/blob/main/CHANGELOG.md"
+  spec.metadata["source_code_uri"] = "https://github.com/koenhandekyn/ops_backups/tree/main"
+  spec.metadata["changelog_uri"] = "https://github.com/koenhandekyn/ops_backups/blob/main/CHANGELOG.md"
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
     Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
