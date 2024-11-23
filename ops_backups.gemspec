@@ -10,6 +10,7 @@ Gem::Specification.new do |spec|
   spec.description = "This gem provides functionality to backup PostgreSQL databases to ActiveStorage (S3) from within a Rails context."
   spec.license     = "MIT"
   spec.required_ruby_version = ">= 3.0.0"
+  spec.executables = ['pgdb']
 
   # # Prevent pushing this gem to RubyGems.org. To allow pushes either set the "allowed_push_host"
   # # to allow pushing to a single host or delete this section to allow pushing to any host.
@@ -20,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.metadata["changelog_uri"] = "https://github.com/koenhandekyn/ops_backups/blob/main/CHANGELOG.md"
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
-    Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
+    Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md", "bin/pgdb", "bin/pgdb.sh"]
   end
 
   spec.add_dependency "rails", ">= 6"
