@@ -1,4 +1,4 @@
-class CreateOpsBackups < ActiveRecord::Migration[8.0]
+class CreateOpsBackups < ActiveRecord::Migration[5.0]
   def change
     # check if the table already exists
     return if table_exists?(:ops_backups)

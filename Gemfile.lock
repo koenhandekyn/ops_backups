@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ops_backups (0.1.7)
+    ops_backups (0.1.9)
       rails (>= 6)
 
 GEM
@@ -110,7 +110,7 @@ GEM
       net-smtp
     marcel (1.0.4)
     mini_mime (1.1.5)
-    minitest (5.25.1)
+    minitest (5.25.2)
     net-imap (0.5.1)
       date
       net-protocol
@@ -145,7 +145,7 @@ GEM
       railties (>= 7.0.0)
     psych (5.2.0)
       stringio
-    puma (6.4.3)
+    puma (6.5.0)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.1.8)
@@ -186,7 +186,7 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.2.1)
-    rdoc (6.7.0)
+    rdoc (6.8.1)
       psych (>= 4.0.0)
     regexp_parser (2.9.2)
     reline (0.5.11)
