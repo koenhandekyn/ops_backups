@@ -10,14 +10,6 @@ module OpsBackups
       [ "created_at", "id", "name", "new_id", "tag", "updated_at" ]
     end
 
-    def self.test
-      "self.test"
-    end
-
-    def hoho
-      "hihi"
-    end
-
     def db_pg_backup(tag: nil, exclude_tables: [])
       db_url = ENV["DATABASE_URL"]
       tag ||= exclude_tables.empty? ? "db_pg_full" : "db_pg_partial" # if tag.empty?
@@ -48,36 +40,36 @@ module OpsBackups
         end
       end
     end
-  end
 
-  # Keep all the backups of the last day
-  # Keep the last backup of each day in the last week (except the last day)
-  # Keep the last backup of each week in the last month (except the last week)
-  # Keep the last backup of each month before the last month
-  def self.retain_tiered_cleanup_policy(tag: "")
-    week = where(created_at: 1.week.ago..1.day.ago)
-      .group_by { |b| b.created_at.to_date }
-    month = where(created_at: 1.month.ago..1.week.ago)
-      .group_by { |b| b.created_at.beginning_of_week }
-    older = where(created_at: 1.year.ago..1.month.ago)
-      .group_by { |b| b.created_at.beginning_of_month }
+    # Keep all the backups of the last day
+    # Keep the last backup of each day in the last week (except the last day)
+    # Keep the last backup of each week in the last month (except the last week)
+    # Keep the last backup of each month before the last month
+    def self.retain_tiered_cleanup_policy(tag: "")
+      week = where(created_at: 1.week.ago..1.day.ago)
+        .group_by { |b| b.created_at.to_date }
+      month = where(created_at: 1.month.ago..1.week.ago)
+        .group_by { |b| b.created_at.beginning_of_week }
+      older = where(created_at: 1.year.ago..1.month.ago)
+        .group_by { |b| b.created_at.beginning_of_month }
 
-    backups = week.merge(month).merge(older)
+      backups = week.merge(month).merge(older)
 
-    ids = backups.flat_map do |_, group|
-      group.sort_by(&:created_at).reverse.drop(1).pluck(:id)
+      ids = backups.flat_map do |_, group|
+        group.sort_by(&:created_at).reverse.drop(1).pluck(:id)
+      end
+
+      records = where(id: ids)
+      records = records.where(tag: tag) if tag.present?
+      records.destroy_all
     end
 
-    records = where(id: ids)
-    records = records.where(tag: tag) if tag.present?
-    records.destroy_all
-  end
-
-  # Keep the last 14 backups
-  def self.retain_last_limit_cleanup_policy(limit: 14, tag: "")
-    records = all
-    records = records.where(tag: tag) if tag.present?
-    records = records.order(updated_at: :desc).offset(limit)
-    records.destroy_all
+    # Keep the last 14 backups
+    def self.retain_last_limit_cleanup_policy(limit: 14, tag: "")
+      records = all
+      records = records.where(tag: tag) if tag.present?
+      records = records.order(updated_at: :desc).offset(limit)
+      records.destroy_all
+    end
   end
 end
