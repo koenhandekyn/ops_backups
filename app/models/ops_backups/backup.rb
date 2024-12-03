@@ -1,13 +1,23 @@
 module OpsBackups
   class Backup < ActiveRecord::Base
-    # has_one_attached :backup_file, service: :backup_storage
-    has_one_attached :backup_file, service: :backups
+    include ActionView::Helpers::NumberHelper
+
     self.table_name = "ops_backups"
+
+    has_one_attached :backup_file, service: :backups
 
     default_scope { order(updated_at: :desc) }
 
     def self.ransackable_attributes(auth_object = nil)
       [ "created_at", "id", "name", "new_id", "tag", "updated_at" ]
+    end
+
+    def size
+      backup_file.attached? ? number_to_human_size(backup_file.byte_size) : "N/A"
+    end
+
+    def duration
+      Time.at((updated_at - created_at)).utc.strftime("%H:%M:%S")
     end
 
     def db_pg_backup(tag: nil, exclude_tables: [])

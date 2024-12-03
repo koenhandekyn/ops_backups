@@ -1,0 +1,46 @@
+<style>
+  ops-backups {
+    display: flex;
+    padding: 1em;
+    /* flex column */
+    flex-direction: column;
+    & ops-backup {
+      display: grid;
+      grid-template-columns: 1fr 1fr 10em 10em 18em 3em;
+      padding: 0.25em;
+      & ops-backup-size,
+        ops-backup-duration,
+        ops-backup-created_at,
+        ops-backup-download {
+        text-align: right;
+      }
+    }
+    & ops-backup.header {
+      font-weight: bold;
+    }
+  }
+</style>
+<h1>Backups</h1>
+<ops-backups>
+  <ops-backup class="header">
+    <ops-backup-name>Name</ops-backup-name>
+    <ops-backup-tag>Tag</ops-backup-tag>
+    <ops-backup-size>Size</ops-backup-size>
+    <ops-backup-duration>Duration</ops-backup-duration>
+    <ops-backup-created_at>Created At</ops-backup-created_at>
+  </ops-backup>
+  <% @backups.each do |backup| %>
+    <ops-backup>
+      <ops-backup-name><%= backup.name %></ops-backup-name>
+      <ops-backup-tag><%= backup.name %></ops-backup-tag>
+      <ops-backup-size><%= backup.size %></ops-backup-size>
+      <ops-backup-duration><%= backup.duration %></ops-backup-duration>
+      <ops-backup-created_at><%= backup.created_at %></ops-backup-created_at>
+      <ops-backup-download>
+        <% if backup.backup_file.attached? %>
+          <a href="<%= download_backup_path(backup) %>" download>📎</a>
+        <% end %>
+      </ops-backup-download>
+    </ops-backup>
+  <% end %>
+</ops-backups>
