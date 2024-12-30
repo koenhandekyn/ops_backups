@@ -9,7 +9,7 @@ module OpsBackups
     default_scope { order(updated_at: :desc) }
 
     def self.ransackable_attributes(auth_object = nil)
-      [ "created_at", "id", "name", "new_id", "tag", "updated_at" ]
+      [ "created_at", "id", "name", "id_value", "tag", "updated_at" ]
     end
 
     def size
