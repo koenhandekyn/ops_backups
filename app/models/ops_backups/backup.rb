@@ -8,10 +8,6 @@ module OpsBackups
 
     default_scope { order(updated_at: :desc) }
 
-    def self.ransackable_attributes(auth_object = nil)
-      [ "created_at", "id", "name", "id_value", "tag", "updated_at" ]
-    end
-
     def size
       backup_file.attached? ? number_to_human_size(backup_file.byte_size) : "N/A"
     end
@@ -21,6 +17,11 @@ module OpsBackups
     end
 
     def db_pg_backup(tag: nil, exclude_tables: [])
+      if ENV["DATABASE_URL"].blank?
+        Rails.logger.error("Failed to backup database: DATABASE_URL is not set")
+        return
+      end
+
       db_url = ENV["DATABASE_URL"]
       tag ||= exclude_tables.empty? ? "db_pg_full" : "db_pg_partial" # if tag.empty?
       self.tag = tag

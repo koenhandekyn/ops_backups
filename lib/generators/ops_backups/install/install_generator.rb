@@ -39,7 +39,7 @@ class OpsBackups::InstallGenerator < Rails::Generators::Base
       recurring_config = <<~YAML.lines.map { |line| "  #{line}" }.join
         backup_db:
           class: OpsBackups::BackupDbJob
-          args: [tag: "db_pg_backup", cleanup: "retain_tiered_cleanup_policy"]
+          args: [tag: "db_pg_backup", cleanup: "retain_tiered"]
           schedule: every hour
       YAML
 

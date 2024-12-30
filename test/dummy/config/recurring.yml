@@ -1,0 +1,14 @@
+production:
+  backup_db:
+    class: OpsBackups::BackupDbJob
+    args: [tag: "db_pg_backup", cleanup: "retain_tiered"]
+    schedule: every hour
+development:
+  full_backup:
+    class: OpsBackups::BackupDbJob
+    args: [tag: "db_pg_backup", cleanup: "retain_tiered"]
+    schedule: every hour
+  fast_backup:
+    class: OpsBackups::BackupDbJob
+    args: [tag: "db_pg_backup", cleanup: "retain_tiered", exclude_tables: "versions"]
+    schedule: every hour

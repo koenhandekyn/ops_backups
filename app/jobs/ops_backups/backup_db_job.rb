@@ -12,6 +12,7 @@ class OpsBackups::BackupDbJob < ApplicationJob
     exclude_tables = options[:exclude_tables] || []
     tag = options[:tag] || (exclude_tables.empty? ? "db_pg_full" : "db_pg_partial")
     cleanup = options[:cleanup]
+    Rails.logger.info "Performing backup with tag: #{tag} and exclude_tables: #{exclude_tables}"
     OpsBackups::Backup.new.db_pg_backup(exclude_tables:, tag:)
     OpsBackups::Backup.send("#{cleanup}_cleanup_policy", tag: tag) if cleanup.present?
   end

@@ -1,3 +1,13 @@
+# monkey patch the Backup model to allow for ransackable_attributes
+module OpsBackups
+  class Backup < ActiveRecord::Base
+    def self.ransackable_attributes(auth_object = nil)
+      [ "created_at", "id", "name", "id_value", "tag", "updated_at" ]
+    end
+  end
+end
+
+# ActiveAdmin resource for OpsBackups::Backup
 ActiveAdmin.register OpsBackups::Backup do
   menu parent: "Ops", label: I18n.t("admin.ops.backup")
 

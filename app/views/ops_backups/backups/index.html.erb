@@ -1,45 +1,119 @@
 <style>
+  @keyframes fadeOut {
+    to {
+      opacity: 0;
+    }
+  }
+  /* all elements have a border */
+  ops-backups * {
+    /* border: 1px solid red; */
+  }
   ops-backups {
     display: flex;
-    padding: 1em;
+    padding: 0.5em;
     flex-direction: column;
+    & h1 {
+      margin: 0;
+      margin-bottom: 0.25em;
+    }
     & ops-backup {
       display: grid;
-      grid-template-columns: 1fr 1fr 10em 10em 18em 3em;
+      grid-template-columns: 3em 3fr 2fr 6em 6em 12em 6em;
+      gap: 0.5em;
       padding: 0.25em;
-      & ops-backup-size,
+      & ops-backup-index,
+        ops-backup-size,
         ops-backup-duration,
         ops-backup-created_at,
-        ops-backup-download {
+        ops-backup-actions {
         text-align: right;
+      }
+      & ops-backup-actions {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        gap: 0.5em;
       }
     }
     & ops-backup.header {
       font-weight: bold;
+      border-bottom: 1px solid black;
+      margin-bottom: 0.25em;
+    }
+    & ops-backup-jobs {
+      display: flex;
+      gap: 0.5em;
+      margin-bottom: 0.5em;
+      /* padding: 0.5em; */
+    }
+  }
+  .alerts {
+    /* position these alerts at the bottom right */
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+    animation: fadeOut 3s forwards 3s;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5em;
+    & .alert {
+      padding: 0.5em;
+      border-radius: 0.25em;
+    }
+    & .alert-notice {
+      background-color: lightgreen;
+    }
+    & .alert-danger {
+      background-color: lightcoral;
     }
   }
 </style>
-<h1>Backups</h1>
 <ops-backups>
+  <h1>Backups</h1>
+  <% if @jobs.present? %>
+    <ops-backup-jobs>
+      <% @jobs.each do |name, config| %>
+        <%= button_to name, trigger_job_path(job_name: name), method: :post %>
+      <% end %>
+    </ops-backup-jobs>
+  <% end %>
   <ops-backup class="header">
+    <ops-backup-index>Index</ops-backup-index>
     <ops-backup-name>Name</ops-backup-name>
     <ops-backup-tag>Tag</ops-backup-tag>
     <ops-backup-size>Size</ops-backup-size>
     <ops-backup-duration>Duration</ops-backup-duration>
     <ops-backup-created_at>Created At</ops-backup-created_at>
+    <ops-backup-actions>Actions</ops-backup-actions>
   </ops-backup>
-  <% @backups.each do |backup| %>
-    <ops-backup>
+  <% @backups.each.with_index do |backup, i| %>
+    <ops-backup id="ops-backup-<%= i %>">
+      <ops-backup-index><%= i %></ops-backup-index>
       <ops-backup-name><%= backup.name %></ops-backup-name>
-      <ops-backup-tag><%= backup.name %></ops-backup-tag>
+      <ops-backup-tag><%= backup.tag %></ops-backup-tag>
       <ops-backup-size><%= backup.size %></ops-backup-size>
       <ops-backup-duration><%= backup.duration %></ops-backup-duration>
-      <ops-backup-created_at><%= backup.created_at %></ops-backup-created_at>
-      <ops-backup-download>
+      <ops-backup-created_at data-time="<%= backup.created_at.iso8601 %>"><%= l backup.created_at, format: :short %></ops-backup-created_at>
+      <ops-backup-actions>
         <% if backup.backup_file.attached? %>
-          <a href="<%= download_backup_path(backup) %>" download>📎</a>
+          <%= button_to "📎", download_backup_path(backup), method: :get %>
         <% end %>
-      </ops-backup-download>
+        <%= button_to "🗑️", backup_path(backup), method: :delete %>
+      </ops-backup-actions>
     </ops-backup>
   <% end %>
 </ops-backups>
+<div class="alerts">
+  <% flash.each do |key, value| %>
+    <div class="alert alert-<%= key %>"><%= value %></div>
+  <% end %>
+</div>
+<script>
+  // document.addEventListener("DOMContentLoaded", function() {
+  //   document.querySelectorAll("ops-backup-created_at").forEach(function(element) {
+  //     const time = new Date(element.getAttribute("data-time"));
+  //     element.textContent = time.toLocaleString();
+  //   });
+  // });
+</script>

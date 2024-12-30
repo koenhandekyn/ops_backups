@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ops_backups (0.1.11)
+    ops_backups (0.1.15)
       rails (>= 6)
 
 GEM
