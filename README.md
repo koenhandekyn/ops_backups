@@ -3,6 +3,8 @@
 A Ruby gem that provides a simple way to backup (self)-hosted postgres databases to
 ActiveStorage services like S3, Google Cloud Storage, etc.
 
+The gem assumes you are deploying with Kamal (https://kamal-deploy.org).
+
 ## Usage
 
 ## Installation
